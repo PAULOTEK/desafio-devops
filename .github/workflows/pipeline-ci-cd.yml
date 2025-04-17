@@ -1,0 +1,76 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: 🔧 Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔄 Checkout do repositório
+        uses: actions/checkout@v3
+
+      - name: 🟨 Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: 📦 Instalar dependências
+        run: npm install
+
+      - name: 🧪 Rodar testes (placeholder)
+        run: echo "Nenhum teste definido"
+
+      - name: 🏗️ Build do projeto
+        run: npm run build
+
+      - name: 📁 Salvar artefato de build
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-artifact
+          path: dist/
+
+  release:
+    name: 📦 Criar release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Baixar artefato de build
+        uses: actions/download-artifact@v3
+        with:
+          name: dist-artifact
+          path: dist/
+
+      - name: 📦 Criar release no GitHub
+        uses: softprops/action-gh-release@v1
+        with:
+          name: "Release - ${{ github.sha }}"
+          tag_name: v1-${{ github.run_number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    name: 🚀 Deploy para ambiente de teste
+    needs: release
+    runs-on: ubuntu-latest
+    environment:
+      name: teste
+      url: http://seu-endpoint-de-teste.com
+
+    steps:
+      - name: 📥 Baixar artefato
+        uses: actions/download-artifact@v3
+        with:
+          name: dist-artifact
+          path: dist/
+
+      - name: 🚧 Deploy (placeholder)
+        run: echo "Aqui faria o deploy para o servidor"
+
+      - name: ✅ Notificar sucesso
+        run: echo "Deploy finalizado com sucesso!"
+

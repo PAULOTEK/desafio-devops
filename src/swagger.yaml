@@ -1,0 +1,25 @@
+openapi: 3.0.0
+info:
+  title: API de Tarefas
+  description: API para gerenciar tarefas
+  version: 1.0.0
+paths:
+  /api/tasks:
+    get:
+      summary: Retorna uma lista de tarefas
+      responses:
+        '200':
+          description: Lista de tarefas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    completed:
+                      type: boolean

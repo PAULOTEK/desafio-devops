@@ -1,0 +1,5 @@
+name: 'Verifica tsconfig'
+description: 'Verifica se tsconfig.json existe no projeto'
+runs:
+  using: 'node16'
+  main: 'dist/index.ts'
