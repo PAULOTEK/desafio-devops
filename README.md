@@ -1,4 +1,30 @@
-# API de Tarefas
+# 📌 API de Tarefas
+
+API RESTful desenvolvida com **Node.js + TypeScript** para gerenciar tarefas. Inclui documentação Swagger, CI/CD com GitHub Actions e suporte a Docker.
+
+## 🚀 Tecnologias
+
+- Node.js
+- TypeScript
+- Express.js
+- Swagger (OpenAPI)
+- Docker
+- GitHub Actions
+
+---
+
+## 📂 Estrutura de Diretórios
+
+```bash
+src/
+├── controllers/
+├── data/
+├── models/
+├── routes/
+├── swagger.yaml
+├── index.ts
+
+```
 
 Versão: 1.0.0  
 OAS: 3.0  
@@ -36,6 +62,7 @@ Retorna uma lista de tarefas.
   }
 ]
 ```
+
 Compilação e Deploy
 Processo de Compilação e Build
 O processo de compilação e build da aplicação está automatizado através de um pipeline de CI/CD no GitHub Actions. Ele é responsável por compilar o código, rodar testes (se definidos) e criar artefatos de build para o deploy.

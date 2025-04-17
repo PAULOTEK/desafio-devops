@@ -2,4 +2,8 @@ node_modules
 .idea
 infra
 .gitignore
-Makefile
+.git
+dist
+coverage
+Dockerfile
+README.md

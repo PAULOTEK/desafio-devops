@@ -12,17 +12,18 @@ COPY . .
 
 RUN npm run build
 
-RUN npm audit fix
+RUN npm audit fix || true
 
 RUN npm prune --production
 
-FROM public.ecr.aws/docker/library/23.10-slim
+# -------------------- Fase Final --------------------
+FROM public.ecr.aws/docker/library/node:23.10-slim
 
 WORKDIR /usr/src/app
 
 RUN rm -f /etc/security/capability.conf
 
-RUN apt-get update -y && apt-get install -y openssl
+RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder --chown=node:node /usr/src/app/package.json ./
 COPY --from=builder --chown=node:node /usr/src/app/node_modules ./node_modules
@@ -35,8 +36,7 @@ RUN chown -R node:node /usr/src/app
 
 USER node
 
-EXPOSE 3013
+EXPOSE 3000
 
 CMD ["node", "build/main.js"]
-
 
