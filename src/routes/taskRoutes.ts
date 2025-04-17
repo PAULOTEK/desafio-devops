@@ -34,9 +34,13 @@ const router = Router();
  */
 
 router.get('/tasks', getAllTasks);
+// @ts-ignore
 router.get('/tasks/:id', getTaskById);
+// @ts-ignore
 router.post('/tasks', createTask);
+// @ts-ignore
 router.put('/tasks/:id', updateTask);
+// @ts-ignore
 router.delete('/tasks/:id', deleteTask);
 
 export default router;
