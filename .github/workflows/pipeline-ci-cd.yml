@@ -16,7 +16,7 @@ jobs:
       - name: 🟨 Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22'
+          node-version: '23'
 
       - name: 📦 Instalar dependências
         run: npm install
