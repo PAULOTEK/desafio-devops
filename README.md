@@ -62,4 +62,4 @@ Retorna uma lista de tarefas.
   }
 ]
 ```
-![Diagrama da API](./docs/diagrama-api.png)
+![Diagrama da API](https://github.com/PAULOTEK/desafio-devops/blob/main/%20docs/diagrama-api.png?raw=true)
