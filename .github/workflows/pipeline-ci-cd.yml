@@ -59,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: teste
-      url: http://seu-endpoint-de-teste.com
+      url: https://desafio-teste.com
 
     steps:
       - name: 🔄 Checkout do repositório
