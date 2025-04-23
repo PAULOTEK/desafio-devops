@@ -21,7 +21,7 @@ src/
 ├── data/
 ├── models/
 ├── routes/
-├── swagger.yaml
+├── swagger.ts
 ├── index.ts
 
 ```
