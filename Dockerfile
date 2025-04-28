@@ -45,7 +45,6 @@ COPY package*.json ./
 COPY prisma ./prisma
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/dist ./dist
-COPY .env .
 
 # --- IMPORTANTE ---
 # Rodar prisma generate como root
