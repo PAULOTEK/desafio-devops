@@ -22,7 +22,7 @@ src/
 ├── models/
 ├── routes/
 ├── swagger.ts
-├── index.ts
+├── server.ts
 
 ```
 

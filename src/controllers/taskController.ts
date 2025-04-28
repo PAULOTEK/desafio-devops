@@ -1,58 +1,86 @@
 import { Request, Response } from 'express';
-import { tasks } from '../data/tasks';
-import { Task } from '../models/task';
+import { PrismaClient } from '@prisma/client';
 
-// Atualiza o nextId baseado nas tasks existentes
-let nextId = tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1;
+const prisma = new PrismaClient();
 
 const validStatuses = ['pendente', 'em progresso', 'concluída'];
 
-export const getAllTasks = (req: Request, res: Response) => {
-    res.json(tasks);
+export const getAllTasks = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const tasks = await prisma.task.findMany();
+        res.json(tasks);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao recuperar tarefas.' });
+    }
 };
 
-export const getTaskById = (req: Request, res: Response) => {
-    const task = tasks.find(t => t.id === parseInt(req.params.id));
-    if (!task) return res.status(404).json({ error: 'Tarefa não encontrada.' });
-    res.json(task);
+export const getTaskById = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const task = await prisma.task.findUnique({
+            where: { id: parseInt(req.params.id) }
+        });
+        if (!task) {
+            res.status(404).json({ error: 'Tarefa não encontrada.' });
+            return;
+        }
+        res.json(task);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao recuperar tarefa.' });
+    }
 };
 
-export const createTask = (req: Request, res: Response) => {
+export const createTask = async (req: Request, res: Response): Promise<void> => {
     const { title, description } = req.body;
-    if (!title) return res.status(400).json({ error: 'O campo "title" é obrigatório.' });
+    if (!title) {
+        res.status(400).json({ error: 'O campo "title" é obrigatório.' });
+        return;
+    }
 
-    const newTask: Task = {
-        id: nextId++,
-        title,
-        description,
-        status: 'pendente'
-    };
-
-    tasks.push(newTask);
-    res.status(201).json(newTask);
+    try {
+        const newTask = await prisma.task.create({
+            data: {
+                title,
+                description,
+                status: 'pendente',
+            },
+        });
+        res.status(201).json(newTask);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao criar tarefa.' });
+    }
 };
 
-export const updateTask = (req: Request, res: Response) => {
-    const task = tasks.find(t => t.id === parseInt(req.params.id));
-    if (!task) return res.status(404).json({ error: 'Tarefa não encontrada.' });
-
+export const updateTask = async (req: Request, res: Response): Promise<void> => {
     const { title, description, status } = req.body;
 
     if (status && !validStatuses.includes(status)) {
-        return res.status(400).json({ error: `Status inválido. Use: ${validStatuses.join(', ')}` });
+        res.status(400).json({ error: `Status inválido. Use: ${validStatuses.join(', ')}` });
+        return;
     }
 
-    if (title !== undefined) task.title = title;
-    if (description !== undefined) task.description = description;
-    if (status !== undefined) task.status = status;
+    try {
+        const task = await prisma.task.update({
+            where: { id: parseInt(req.params.id) },
+            data: {
+                title: title ?? undefined,
+                description: description ?? undefined,
+                status: status ?? undefined,
+            },
+        });
 
-    res.json(task);
+        res.json(task);
+    } catch (error) {
+        res.status(404).json({ error: 'Tarefa não encontrada.' });
+    }
 };
 
-export const deleteTask = (req: Request, res: Response) => {
-    const index = tasks.findIndex(t => t.id === parseInt(req.params.id));
-    if (index === -1) return res.status(404).json({ error: 'Tarefa não encontrada.' });
-
-    tasks.splice(index, 1);
-    res.status(204).send();
+export const deleteTask = async (req: Request, res: Response): Promise<void> => {
+    try {
+        await prisma.task.delete({
+            where: { id: parseInt(req.params.id) },
+        });
+        res.status(204).send();
+    } catch (error) {
+        res.status(404).json({ error: 'Tarefa não encontrada.' });
+    }
 };
