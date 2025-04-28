@@ -1,36 +1,65 @@
+# -------------------- Fase de Build --------------------
 FROM public.ecr.aws/docker/library/node:23.10-slim AS builder
 
 WORKDIR /usr/src/app
 
-RUN apt-get update && apt-get install -y --no-install-recommends libcap2 libcap2-bin && rm -rf /var/lib/apt/lists/*
+# Instalar dependências do sistema
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    openssl \
+    ca-certificates \
+    build-essential \
+    python3 \
+    && rm -rf /var/lib/apt/lists/*
 
+# Copiar pacotes e Prisma schema
 COPY package*.json ./
+COPY prisma ./prisma
+
+# Instalar dependências
 RUN npm install
 
+# Gerar Prisma Client
+RUN npx prisma generate
+
+# Copiar restante da aplicação
 COPY . .
+
+# Build da aplicação
 RUN npm run build
 RUN npm audit fix || true
-RUN npm prune --production
+
 
 # -------------------- Fase Final --------------------
 FROM public.ecr.aws/docker/library/node:23.10-slim
 
 WORKDIR /usr/src/app
 
-RUN rm -f /etc/security/capability.conf
-RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+# Instalar dependências mínimas
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    openssl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
-# 🔧 Corrigido: pasta de build é /dist
-COPY --from=builder --chown=node:node /usr/src/app/package.json ./
-COPY --from=builder --chown=node:node /usr/src/app/node_modules ./node_modules
-COPY --from=builder --chown=node:node /usr/src/app/dist ./dist
+# Copiar somente arquivos necessários
+COPY package*.json ./
+COPY prisma ./prisma
+COPY --from=builder /usr/src/app/node_modules ./node_modules
+COPY --from=builder /usr/src/app/dist ./dist
+COPY .env .
 
-ENV NODE_ENV=production
+# --- IMPORTANTE ---
+# Rodar prisma generate como root
+RUN npx prisma generate
 
-RUN chown -R node:node /usr/src/app
+# Agora mudar para usuário seguro
 USER node
 
+# Definir ambiente
+ENV NODE_ENV=production
+
+# Expor porta
 EXPOSE 3000
 
-# 🔧 Corrigido: entrada correta
-CMD ["node", "dist/index.js"]
+# Rodar app
+CMD ["node", "dist/server.js"]
+
