@@ -6,7 +6,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/desafiodb
+      - DATABASE_URL=postgresql://admin:admin@postgres:5432/desafiodb
       - PORT=3000
     depends_on:
       - postgres

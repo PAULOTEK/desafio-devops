@@ -10,6 +10,7 @@ export const getAllTasks = async (req: Request, res: Response): Promise<void> =>
         const tasks = await prisma.task.findMany();
         res.json(tasks);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: 'Erro ao recuperar tarefas.' });
     }
 };
@@ -25,6 +26,7 @@ export const getTaskById = async (req: Request, res: Response): Promise<void> =>
         }
         res.json(task);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: 'Erro ao recuperar tarefa.' });
     }
 };
@@ -46,6 +48,7 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
         });
         res.status(201).json(newTask);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: 'Erro ao criar tarefa.' });
     }
 };
@@ -70,6 +73,7 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
 
         res.json(task);
     } catch (error) {
+        console.error(error);
         res.status(404).json({ error: 'Tarefa não encontrada.' });
     }
 };
@@ -81,6 +85,7 @@ export const deleteTask = async (req: Request, res: Response): Promise<void> => 
         });
         res.status(204).send();
     } catch (error) {
+        console.error(error);
         res.status(404).json({ error: 'Tarefa não encontrada.' });
     }
 };

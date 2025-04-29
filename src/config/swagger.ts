@@ -12,7 +12,7 @@ const options: swaggerJsDoc.Options = {
             description: 'API para gerenciar tarefas',
         },
     },
-    apis: ['./src/routes/*.ts'],
+    apis: ['src/routes/*.ts'],
 };
 
 const specs = swaggerJsDoc(options);
