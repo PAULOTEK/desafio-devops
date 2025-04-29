@@ -216,14 +216,6 @@ docker-compose up
 
 Isso irá iniciar a API e o banco de dados PostgreSQL.
 
-### 3. Rodando sem Docker
-
-Se preferir rodar sem Docker, apenas execute:
-
-```bash
-npm run dev
-```
-
 ---
 
 ## 🛠️ CI/CD com GitHub Actions

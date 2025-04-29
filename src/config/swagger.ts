@@ -3,6 +3,8 @@ import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { Express } from 'express';
 
+import path from 'path';
+
 const options: swaggerJsDoc.Options = {
     definition: {
         openapi: '3.0.0',
@@ -12,8 +14,9 @@ const options: swaggerJsDoc.Options = {
             description: 'API para gerenciar tarefas',
         },
     },
-    apis: ['src/routes/*.ts'],
+    apis: [path.join(__dirname, '../routes/*.js')],
 };
+
 
 const specs = swaggerJsDoc(options);
 

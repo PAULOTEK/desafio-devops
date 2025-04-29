@@ -12,7 +12,7 @@ const router = Router();
 
 /**
  * @swagger
- * /tasks:
+ * /api/tasks/get:
  *   get:
  *     summary: Retorna todas as tarefas
  *     tags: [Tasks]
@@ -20,11 +20,11 @@ const router = Router();
  *       200:
  *         description: Lista de tarefas
  */
-router.get('/tasks', getAllTasks);
+router.get('/tasks/get', getAllTasks);
 
 /**
  * @swagger
- * /tasks/{id}:
+ * /api/tasks/{id}:
  *   get:
  *     summary: Retorna uma tarefa específica
  *     tags: [Tasks]
@@ -45,7 +45,7 @@ router.get('/tasks/:id', getTaskById);
 
 /**
  * @swagger
- * /tasks:
+ * /api/tasks/create:
  *   post:
  *     summary: Cria uma nova tarefa
  *     tags: [Tasks]
@@ -64,11 +64,11 @@ router.get('/tasks/:id', getTaskById);
  *       201:
  *         description: Tarefa criada
  */
-router.post('/tasks', createTask);
+router.post('/tasks/create', createTask);
 
 /**
  * @swagger
- * /tasks/{id}:
+ * /api/tasks/update/{id}:
  *   put:
  *     summary: Atualiza uma tarefa existente
  *     tags: [Tasks]
@@ -96,11 +96,11 @@ router.post('/tasks', createTask);
  *       404:
  *         description: Tarefa não encontrada
  */
-router.put('/tasks/:id', updateTask);
+router.put('/tasks/update/:id', updateTask);
 
 /**
  * @swagger
- * /tasks/{id}:
+ * /api/tasks/delete/{id}:
  *   delete:
  *     summary: Remove uma tarefa
  *     tags: [Tasks]
@@ -117,7 +117,7 @@ router.put('/tasks/:id', updateTask);
  *       404:
  *         description: Tarefa não encontrada
  */
-router.delete('/tasks/:id', deleteTask);
+router.delete('/tasks/delete/:id', deleteTask);
 
 
 export default router;
